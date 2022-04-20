@@ -16,6 +16,10 @@ const holidays = [
     { date: "12/25/2022", name: "Natal" },
 ];
 
+const compareDates = (date1, date2) => {
+    return date1.toLocaleDateString() == date2.toLocaleDateString();
+};
+
 app.get("/holidays", (req, res) => {
     res.send(holidays);
 });
@@ -24,7 +28,8 @@ app.get("/is-today-holiday", (req, res) => {
     let today = new Date();
 
     for (const day of holidays) {
-        if (day === today.toLocaleDateString()) {
+        let date = new Date(day.date);
+        if (compareDates(today, date)) {
             res.send("Sim, hoje é " + day.name);
             return;
         }
@@ -35,15 +40,14 @@ app.get("/is-today-holiday", (req, res) => {
 app.get("/holiday/:month", (req, res) => {
     const month = req.params.month - 1;
     const days = [];
-    let auxDate;
     for (const holiday of holidays) {
-        auxDate = new Date(holiday.date);
-        if (month == auxDate.getMonth()) {
+        let date = new Date(holiday.date);
+        if (month == date.getMonth()) {
             days.push(holiday);
         }
     }
     res.send(days);
 });
 
-console.log("Aberto na posta 4000");
+console.log("Aberto na porta 4000");
 app.listen(4000);
